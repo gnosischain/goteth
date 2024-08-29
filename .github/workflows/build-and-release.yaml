@@ -27,6 +27,8 @@ jobs:
       
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: 'true'
 
       - name: Get Organization Name
         id: org_name
