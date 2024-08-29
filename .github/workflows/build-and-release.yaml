@@ -1,12 +1,8 @@
 name: Build & Release GC goteth scraper
 
 on:
-  push:
-    branches:
-      - ci
-# on:
-#     pull_request:
-#       types: [ closed ]
+    pull_request:
+      types: [ closed ]
 
 concurrency:
   group: gc-goteth-${{ github.ref }}
@@ -15,7 +11,7 @@ concurrency:
 jobs:
   build:
     
-    # if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
 
     strategy:
       matrix:
