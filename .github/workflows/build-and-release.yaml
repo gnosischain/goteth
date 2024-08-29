@@ -39,6 +39,11 @@ jobs:
         id: commit
         uses: prompt/actions-commit-hash@v3
 
+      - name: Git Submodule Update
+        run: |
+          git pull --recurse-submodules
+          git submodule update --remote --recursive
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3.3.0
         with:
