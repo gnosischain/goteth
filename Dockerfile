@@ -3,12 +3,9 @@ FROM golang:1.21-alpine as builder
 RUN apk add --update git gcc g++ openssh-client make
 WORKDIR /app
 COPY go.mod go.sum ./
-COPY go-relay-client/ ./go-relay-client/
-RUN go mod download
-COPY . .
-RUN go get
-RUN go build -o ./build/goteth
-
+COPY go-relay-client/ go-relay-client/
+RUN make dependencies
+RUN make build
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
