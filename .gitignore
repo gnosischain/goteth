@@ -17,3 +17,5 @@ goteth
 .vscode/**
 
 clickhouse_data/**
+
+vendor
