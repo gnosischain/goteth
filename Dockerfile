@@ -3,6 +3,7 @@ FROM golang:1.22-alpine as builder
 RUN apk add --update git gcc g++ openssh-client make
 WORKDIR /app
 COPY go.mod go.sum ./
+COPY go-relay-client/ go-relay-client/
 RUN go mod download
 COPY . .
 RUN go get
