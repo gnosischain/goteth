@@ -62,15 +62,17 @@ func New(ctx context.Context, url string, options ...DBServiceOption) (*DBServic
 }
 
 func (s *DBService) Connect() error {
-	err := s.ConnectLowLevel()
+
+	err := s.ConnectHighLevel()
 	if err != nil {
-		return err
+		return fmt.Errorf("high level db driver error: %s", err)
 	}
 
-	err = s.ConnectHighLevel()
+	err = s.ConnectLowLevel()
 	if err != nil {
-		return err
+		return fmt.Errorf("low level db driver error: %s", err)
 	}
+
 	return nil
 
 }
