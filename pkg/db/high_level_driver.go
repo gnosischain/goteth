@@ -87,7 +87,7 @@ func ParseChUrlIntoOptionsHighLevel(url string) clickhouse.Options {
 			},
 		}}
 	if strings.Contains(fqdn, "clickhouse.cloud") {
-		options.Addr = []string{fmt.Sprintf("https://%s", fqdn)}
+		options.DialContext = nil // remove dial context
 		options.Protocol = clickhouse.Native
 		options.TLS = &tls.Config{}
 	}
