@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"crypto/tls"
 	"strings"
 	"time"
 
@@ -47,11 +48,18 @@ func ParseChUrlIntoOptionsLowLevel(url string) ch.Options {
 	user = strings.Split(credentials, ":")[0]
 	password = strings.Split(credentials, ":")[1]
 
-	return ch.Options{
+	options := ch.Options{
 		Address:  fqdn,
 		Database: database,
 		User:     user,
-		Password: password}
+		Password: password,
+	}
+
+	if strings.Contains(fqdn, "clickhouse.cloud") {
+		options.TLS = &tls.Config{}
+	}
+
+	return options
 }
 
 func (p *DBService) Persist(
