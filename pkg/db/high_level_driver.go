@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"crypto/tls"
 
 	"fmt"
 	"net"
@@ -48,7 +49,7 @@ func ParseChUrlIntoOptionsHighLevel(url string) clickhouse.Options {
 	password = strings.Split(credentials, ":")[1]
 
 	var dialCount int
-	return clickhouse.Options{
+	options := clickhouse.Options{
 		Addr: []string{fqdn},
 		Auth: clickhouse.Auth{
 			Database: database,
@@ -85,6 +86,12 @@ func ParseChUrlIntoOptionsHighLevel(url string) clickhouse.Options {
 				{Name: utils.CliName, Version: utils.Version},
 			},
 		}}
+	if strings.Contains(fqdn, "clickhouse.cloud") {
+		options.Addr = []string{fmt.Sprintf("https://%s", fqdn)}
+		options.Protocol = clickhouse.Native
+		options.TLS = &tls.Config{}
+	}
+	return options
 }
 
 func (p *DBService) Delete(obj DeletableObject) error {
