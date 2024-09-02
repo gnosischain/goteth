@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"crypto/tls"
+	"fmt"
 	"strings"
 	"time"
 
@@ -10,21 +11,31 @@ import (
 	"github.com/ClickHouse/ch-go/proto"
 )
 
-func (s *DBService) ConnectLowLevel() error {
+func (s *DBService) ConnectLowLevel(retry bool) error {
 	ctx := context.Background()
 
-	opts := ParseChUrlIntoOptionsLowLevel(s.connectionUrl)
+	opts, migrationUrl := ParseChUrlIntoOptionsLowLevel(s.connectionUrl)
+
 	lowLevelConn, err := ch.Dial(ctx, opts)
 	if err == nil {
 		s.lowLevelClient = lowLevelConn
-		err = s.makeMigrations()
+		s.migrationUrl = migrationUrl
+		log.Info("low level client is connected")
+		// err = s.makeMigrations(migrationUrl)
+	} else {
+		if retry {
+			// database may be in idle state, wait 30 seconds and retry another time
+			log.Warning("database could be idle, service will retry to connect another time in 30 seconds ...")
+			time.Sleep(30 * time.Second)
+			return s.ConnectLowLevel(false)
+		}
 	}
 
 	return err
 
 }
 
-func ParseChUrlIntoOptionsLowLevel(url string) ch.Options {
+func ParseChUrlIntoOptionsLowLevel(url string) (ch.Options, string) {
 	var user string
 	var password string
 	var database string
@@ -48,6 +59,8 @@ func ParseChUrlIntoOptionsLowLevel(url string) ch.Options {
 	user = strings.Split(credentials, ":")[0]
 	password = strings.Split(credentials, ":")[1]
 
+	log.Print(fqdn)
+
 	options := ch.Options{
 		Address:  fqdn,
 		Database: database,
@@ -55,11 +68,13 @@ func ParseChUrlIntoOptionsLowLevel(url string) ch.Options {
 		Password: password,
 	}
 
+	migrationDatabaseUrl := fmt.Sprintf("%s?x-multi-statement=true", url)
 	if strings.Contains(fqdn, "clickhouse.cloud") {
 		options.TLS = &tls.Config{}
+		migrationDatabaseUrl = fmt.Sprintf("%s?x-multi-statement=true&x-migrations-table-engine=MergeTree&secure=true", url)
 	}
 
-	return options
+	return options, migrationDatabaseUrl
 }
 
 func (p *DBService) Persist(

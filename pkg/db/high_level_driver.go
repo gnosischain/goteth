@@ -19,8 +19,15 @@ func (s *DBService) ConnectHighLevel() error {
 	if err != nil {
 		return err
 	}
+
 	s.highLevelClient = conn
-	return conn.Ping(context.Background())
+	erro := conn.Ping(context.Background())
+	if erro != nil {
+		return erro
+	}
+
+	log.Info("high level client is connected")
+	return nil
 
 }
 

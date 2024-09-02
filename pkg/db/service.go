@@ -32,6 +32,8 @@ type DBService struct {
 	ctx           context.Context
 	connectionUrl string // the url might not be necessary (better to remove it?¿)
 
+	migrationUrl string
+
 	lowLevelClient  *ch.Client  // for bulk loads, mainly insert
 	highLevelClient driver.Conn // for side tasks, like Select and Delete
 
@@ -63,18 +65,27 @@ func New(ctx context.Context, url string, options ...DBServiceOption) (*DBServic
 
 func (s *DBService) Connect() error {
 
-	err := s.ConnectHighLevel()
-	if err != nil {
-		return fmt.Errorf("high level db driver error: %s", err)
-	}
-
-	err = s.ConnectLowLevel()
+	err := s.ConnectLowLevel(true)
 	if err != nil {
 		return fmt.Errorf("low level db driver error: %s", err)
 	}
 
-	return nil
+	err = s.ConnectHighLevel()
+	if err != nil {
+		return fmt.Errorf("high level db driver error: %s", err)
+	}
 
+	return nil
+}
+
+func (s *DBService) Migrate() error {
+
+	err := s.makeMigrations()
+	if err != nil {
+		return fmt.Errorf("migration error: %s", err)
+	}
+
+	return nil
 }
 
 func WithUrl(url string) DBServiceOption {
