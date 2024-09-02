@@ -80,7 +80,7 @@ func NewChainAnalyzer(
 		return &ChainAnalyzer{
 			ctx:    ctx,
 			cancel: cancel,
-		}, errors.Wrap(err, "unable to read metric.")
+		}, errors.Wrap(err, "unable to read metric")
 	}
 
 	idbClient, err := db.New(ctx, iConfig.DBUrl)
@@ -88,7 +88,7 @@ func NewChainAnalyzer(
 		return &ChainAnalyzer{
 			ctx:    ctx,
 			cancel: cancel,
-		}, errors.Wrap(err, "unable to generate DB Client.")
+		}, errors.Wrap(err, "unable to generate DB Client")
 	}
 
 	err = idbClient.Connect()
@@ -96,7 +96,15 @@ func NewChainAnalyzer(
 		return &ChainAnalyzer{
 			ctx:    ctx,
 			cancel: cancel,
-		}, errors.Wrap(err, "unable to connect DB Client.")
+		}, errors.Wrap(err, "unable to connect DB Client")
+	}
+
+	err = idbClient.Migrate()
+	if err != nil {
+		return &ChainAnalyzer{
+			ctx:    ctx,
+			cancel: cancel,
+		}, errors.Wrap(err, "unable to perform DB migrations")
 	}
 
 	// generate the httpAPI client
@@ -109,7 +117,7 @@ func NewChainAnalyzer(
 		return &ChainAnalyzer{
 			ctx:    ctx,
 			cancel: cancel,
-		}, errors.Wrap(err, "unable to generate API Client.")
+		}, errors.Wrap(err, "unable to generate API Client")
 	}
 
 	genesisTime := cli.RequestGenesis()
@@ -120,7 +128,7 @@ func NewChainAnalyzer(
 		return &ChainAnalyzer{
 			ctx:    ctx,
 			cancel: cancel,
-		}, errors.Wrap(err, "unable to generate API Client.")
+		}, errors.Wrap(err, "unable to generate API Client")
 	}
 
 	idbClient.InitGenesis(genesisTime)
