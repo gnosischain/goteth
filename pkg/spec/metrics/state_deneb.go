@@ -259,7 +259,8 @@ func (p DenebMetrics) isFlagPossible(valIdx phase0.ValidatorIndex, flagIndex int
 	case spec.AttHeadFlagIndex: // 1
 		maxInclusionDelay = 1
 	default:
-		log.Fatalf("provided flag index %d is not known", flagIndex)
+		// was fatal
+		log.Errorf("provided flag index %d is not known", flagIndex)
 	}
 
 	// look for any block proposed => the attester could have achieved it

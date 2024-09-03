@@ -99,14 +99,6 @@ func NewChainAnalyzer(
 		}, errors.Wrap(err, "unable to connect DB Client")
 	}
 
-	err = idbClient.Migrate()
-	if err != nil {
-		return &ChainAnalyzer{
-			ctx:    ctx,
-			cancel: cancel,
-		}, errors.Wrap(err, "unable to perform DB migrations")
-	}
-
 	// generate the httpAPI client
 	cli, err := clientapi.NewAPIClient(pCtx,
 		iConfig.BnEndpoint,

@@ -25,6 +25,11 @@ func NewQueue() ChainCache {
 
 func (s *ChainCache) AddNewState(newState *spec.AgnosticState) {
 
+	if newState == nil {
+		log.Error("state is nil")
+		return
+	}
+
 	blockList := make([]*spec.AgnosticBlock, 0)
 	epochStartSlot := phase0.Slot(newState.Epoch * spec.SlotsPerEpoch)
 	epochEndSlot := phase0.Slot((newState.Epoch+1)*spec.SlotsPerEpoch - 1)

@@ -26,13 +26,9 @@ func (s *APIClient) RequestBlobSidecars(slot phase0.Slot) ([]*local_spec.Agnosti
 	blobs := blobsResp.Data
 
 	for _, item := range blobs {
-		agnosticBlob, err := local_spec.NewAgnosticBlobFromAPI(slot, *item)
-
-		if err != nil {
-			return nil, fmt.Errorf("could not retrieve blob sidecars for slot %d: %s", slot, err)
-		}
+		agnosticBlob := local_spec.NewAgnosticBlobFromAPI(slot, *item)
 		agnosticBlobs = append(agnosticBlobs, agnosticBlob)
-
 	}
+
 	return agnosticBlobs, nil
 }

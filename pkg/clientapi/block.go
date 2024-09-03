@@ -76,7 +76,11 @@ func (s *APIClient) RequestBeaconBlock(slot phase0.Slot) (*local_spec.AgnosticBl
 		customBlock.ExecutionPayload.PayloadSize = uint32(block.Size())
 	}
 
-	customBlock.StateRoot = s.RequestStateRoot(slot)
+	stateRoot := s.RequestStateRoot(slot)
+
+	if stateRoot != nil {
+		customBlock.StateRoot = *stateRoot
+	}
 
 	// optional depending on metrics
 	if s.Metrics.APIRewards {
@@ -146,9 +150,8 @@ func (s *APIClient) CreateMissingBlock(slot phase0.Slot) *local_spec.AgnosticBlo
 		}
 	}
 
-	return &local_spec.AgnosticBlock{
+	agnosticBlock := &local_spec.AgnosticBlock{
 		Slot:              slot,
-		StateRoot:         s.RequestStateRoot(slot),
 		ProposerIndex:     proposerValIdx,
 		Graffiti:          [32]byte{},
 		Proposed:          false,
@@ -176,6 +179,14 @@ func (s *APIClient) CreateMissingBlock(slot phase0.Slot) *local_spec.AgnosticBlo
 		CompressionTime:   0 * time.Second,
 		DecompressionTime: 0 * time.Second,
 	}
+
+	stateRoot := s.RequestStateRoot(slot)
+
+	if stateRoot != nil {
+		agnosticBlock.StateRoot = *stateRoot
+	}
+
+	return agnosticBlock
 }
 
 // RequestBlockByHash retrieves block from the execution client for the given hash

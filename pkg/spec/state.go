@@ -14,7 +14,7 @@ import (
 type AgnosticState struct {
 	Version                    spec.DataVersion
 	GenesisTimestamp           uint64 // genesis timestamp
-	StateRoot                  phase0.Root
+	StateRoot                  *phase0.Root
 	Epoch                      phase0.Epoch                 // Epoch of the state
 	Slot                       phase0.Slot                  // Slot of the state
 	Balances                   []phase0.Gwei                // balance of each validator
@@ -285,8 +285,10 @@ func (p AgnosticState) GetBlockRootAtSlot(slot phase0.Slot) phase0.Root {
 
 // https://github.com/ethereum/consensus-specs/blob/dev/specs/phase0/beacon-chain.md#get_block_root_at_slot
 func (p AgnosticState) EmptyStateRoot() bool {
-
-	return p.StateRoot == phase0.Root{}
+	if p.StateRoot != nil {
+		return *p.StateRoot == phase0.Root{}
+	}
+	return true
 }
 
 // This Wrapper is meant to include all necessary data from the Phase0 Fork

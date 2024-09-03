@@ -70,14 +70,15 @@ func (s *ChainAnalyzer) processBlobSidecars(block *spec.AgnosticBlock, txs []spe
 	blobs, err := s.cli.RequestBlobSidecars(block.Slot)
 
 	if err != nil {
-		log.Fatalf("could not download blob sidecars for slot %d: %s", block.Slot, err)
-	}
-
-	if len(blobs) > 0 {
-		for _, blob := range blobs {
-			blob.GetTxHash(txs)
-			persistable = append(persistable, blob)
+		log.Warningf("blob sidecards for slot %d: %s", block.Slot, err)
+	} else {
+		log.Infof("fetched blob sidecards for slot %d", block.Slot)
+		if len(blobs) > 0 {
+			for _, blob := range blobs {
+				blob.GetTxHash(txs)
+				persistable = append(persistable, blob)
+			}
+			s.dbClient.PersistBlobSidecars(persistable)
 		}
-		s.dbClient.PersistBlobSidecars(blobs)
 	}
 }

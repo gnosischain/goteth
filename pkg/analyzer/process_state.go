@@ -93,9 +93,9 @@ func (s *ChainAnalyzer) processPoolMetrics(epoch phase0.Epoch) {
 	err := s.dbClient.InsertPoolSummary(epoch)
 
 	// we need sameEpoch and nextEpoch
-
 	if err != nil {
-		log.Fatalf("error persisting pool metrics: %s", err.Error())
+		// was fatal
+		log.Errorf("error persisting pool metrics: %s", err.Error())
 	}
 
 }
@@ -123,7 +123,8 @@ func (s *ChainAnalyzer) processEpochDuties(bundle metrics.StateMetrics) {
 
 	err := s.dbClient.PersistDuties(duties)
 	if err != nil {
-		log.Fatalf("error persisting proposer duties: %s", err.Error())
+		// was fatal
+		log.Errorf("error persisting proposer duties: %s", err.Error())
 	}
 
 }
@@ -186,7 +187,8 @@ func (s *ChainAnalyzer) processEpochValRewards(bundle metrics.StateMetrics) {
 		if len(insertValsObj) > 0 { // persist everything
 			err := s.dbClient.PersistValidatorRewards(insertValsObj)
 			if err != nil {
-				log.Fatalf("error persisting validator rewards: %s", err.Error())
+				// was fatal
+				log.Errorf("error persisting validator rewards: %s", err.Error())
 			}
 
 		}

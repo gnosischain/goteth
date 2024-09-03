@@ -235,7 +235,8 @@ func (p Phase0Metrics) getMinInclusionDelayPossible(slot phase0.Slot) int {
 	for i := slot + 1; i <= (slot + phase0.Slot(spec.SlotsPerEpoch)); i++ {
 		block, err := p.baseMetrics.GetBlockFromSlot(i)
 		if err != nil {
-			log.Fatalf("could not find best inclusion delay: %s", err)
+			// was fatal
+			log.Errorf("could not find best inclusion delay: %s", err)
 		}
 
 		if block.Proposed { // if there was a block proposed inside the inclusion window
