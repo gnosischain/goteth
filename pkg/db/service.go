@@ -70,19 +70,14 @@ func (s *DBService) Connect() error {
 		return fmt.Errorf("low level db driver error: %s", err)
 	}
 
+	err = s.makeMigrations()
+	if err != nil {
+		return fmt.Errorf("migration error: %s", err)
+	}
+
 	err = s.ConnectHighLevel()
 	if err != nil {
 		return fmt.Errorf("high level db driver error: %s", err)
-	}
-
-	return nil
-}
-
-func (s *DBService) Migrate() error {
-
-	err := s.makeMigrations()
-	if err != nil {
-		return fmt.Errorf("migration error: %s", err)
 	}
 
 	return nil

@@ -171,18 +171,22 @@ func (s *ChainAnalyzer) runHistorical(init phase0.Slot, end phase0.Slot) {
 			finalizedSlot, err := s.cli.RequestFinalizedBeaconBlock()
 
 			if err != nil {
-				log.Fatalf("could not request finalized slot: %s", err)
+				// was fatal
+				log.Errorf("could not request finalized slot: %s", err)
+			} else {
+
+				if i >= finalizedSlot.Slot {
+					// keep 2 epochs before finalized, needed to calculate epoch metrics
+					s.AdvanceFinalized(finalizedSlot.Slot - spec.SlotsPerEpoch*5) // includes check and clean
+				} else if i > (5 * spec.SlotsPerEpoch) {
+					// keep 5 epochs before current downloading slot, need 3 at least for epoch metrics
+					// magic number, 2 extra if processer takes long
+					cleanUpToSlot := i - (5 * spec.SlotsPerEpoch)
+					s.downloadCache.CleanUpTo(cleanUpToSlot) // only clean, no check, keep
+				}
+
 			}
 
-			if i >= finalizedSlot.Slot {
-				// keep 2 epochs before finalized, needed to calculate epoch metrics
-				s.AdvanceFinalized(finalizedSlot.Slot - spec.SlotsPerEpoch*5) // includes check and clean
-			} else if i > (5 * spec.SlotsPerEpoch) {
-				// keep 5 epochs before current downloading slot, need 3 at least for epoch metrics
-				// magic number, 2 extra if processer takes long
-				cleanUpToSlot := i - (5 * spec.SlotsPerEpoch)
-				s.downloadCache.CleanUpTo(cleanUpToSlot) // only clean, no check, keep
-			}
 		}
 
 		s.downloadTaskChan <- i

@@ -27,14 +27,16 @@ func (s *ChainAnalyzer) AdvanceFinalized(newFinalizedSlot phase0.Slot) {
 		finalizedStateRoot := s.cli.RequestStateRoot(phase0.Slot(cacheState.Slot))
 		cacheStateRoot := cacheState.StateRoot
 
-		if finalizedStateRoot != cacheStateRoot { // no match, reorg happened
-			log.Warnf("cache state root: %s\nfinalized block root: %s", cacheStateRoot, finalizedStateRoot)
-			log.Warnf("state root for state (slot=%d) incorrect, redownload", cacheState.Slot)
+		if cacheStateRoot != nil && finalizedStateRoot != nil {
+			if *finalizedStateRoot != *cacheStateRoot { // no match, reorg happened
+				log.Warnf("cache state root: %s\nfinalized block root: %s", *cacheStateRoot, *finalizedStateRoot)
+				log.Warnf("state root for state (slot=%d) incorrect, redownload", cacheState.Slot)
 
-			s.dbClient.DeleteStateMetrics(phase0.Epoch(epoch))
-			log.Infof("rewriting metrics for epoch %d", epoch)
-			// write epoch metrics
-			s.ProcessStateTransitionMetrics(phase0.Epoch(epoch))
+				s.dbClient.DeleteStateMetrics(phase0.Epoch(epoch))
+				log.Infof("rewriting metrics for epoch %d", epoch)
+				// write epoch metrics
+				s.ProcessStateTransitionMetrics(phase0.Epoch(epoch))
+			}
 		}
 
 		// loop over slots in the epoch

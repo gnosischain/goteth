@@ -34,7 +34,7 @@ type AgnosticBlobSidecar struct {
 	KZGCommitmentInclusionProof deneb.KZGCommitmentInclusionProof
 }
 
-func NewAgnosticBlobFromAPI(slot phase0.Slot, blob deneb.BlobSidecar) (*AgnosticBlobSidecar, error) {
+func NewAgnosticBlobFromAPI(slot phase0.Slot, blob deneb.BlobSidecar) *AgnosticBlobSidecar {
 
 	return &AgnosticBlobSidecar{
 		Slot:                        slot,
@@ -46,7 +46,7 @@ func NewAgnosticBlobFromAPI(slot phase0.Slot, blob deneb.BlobSidecar) (*Agnostic
 		SignedBlockHeader:           blob.SignedBlockHeader,
 		KZGCommitmentInclusionProof: blob.KZGCommitmentInclusionProof,
 		BlobEnding0s:                utils.CountConsecutiveEnding0(blob.Blob[:]),
-	}, nil
+	}
 }
 
 func (b *AgnosticBlobSidecar) GetTxHash(txs []AgnosticTransaction) {
