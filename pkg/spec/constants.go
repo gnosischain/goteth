@@ -4,25 +4,24 @@ const (
 	MainnetGenesis = 1606824023
 	SepoliaGenesis = 1655733600
 	HoleskyGenesis = 1695902400
-	GnosisGenesis = 1638968400
+	GnosisGenesis  = 1638993340
 )
 
 // Specific Constants for Mainnet configuration
 const (
-    MainnetBaseRewardFactor            = 64
-    MainnetSlotsPerEpoch               = 32
-    MainnetSlotSeconds                 = 12
-    MainnetEpochSlots                  = 32
+	MainnetBaseRewardFactor = 64
+	MainnetSlotsPerEpoch    = 32
+	MainnetSlotSeconds      = 12
+	MainnetEpochSlots       = 32
 )
 
 // Specific Constants for Gnosis configuration
 const (
-    GnosisBaseRewardFactor            = 25
-    GnosisSlotsPerEpoch               = 16
-    GnosisSlotSeconds                 = 5
-    GnosisEpochSlots                  = 16
+	GnosisBaseRewardFactor = 25
+	GnosisSlotsPerEpoch    = 16
+	GnosisSlotSeconds      = 5
+	GnosisEpochSlots       = 16
 )
-
 
 /*
 Phase0
@@ -41,12 +40,13 @@ const (
 	AttTargetFlagIndex = 1
 	AttHeadFlagIndex   = 2
 )
+
 // make this dynamic... fixed to Gnosis for now
 const (
-    BaseRewardFactor            = 25
-    SlotsPerEpoch               = 16
-    SlotSeconds                 = 5
-    EpochSlots                  = 16
+	BaseRewardFactor = 25
+	SlotsPerEpoch    = 16
+	SlotSeconds      = 5
+	EpochSlots       = 16
 )
 
 /*
