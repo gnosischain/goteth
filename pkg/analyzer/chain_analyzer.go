@@ -114,8 +114,10 @@ func NewChainAnalyzer(
 
 	genesisTime := cli.RequestGenesis()
 
+	genesisUnix := uint64(genesisTime.Unix())
+
 	// generate the relays client
-	relayCli, err := relay.InitRelaysMonitorer(pCtx, uint64(genesisTime.Unix()))
+	relayCli, err := relay.InitRelaysMonitorer(pCtx, genesisUnix)
 	if err != nil {
 		return &ChainAnalyzer{
 			ctx:    ctx,
@@ -124,6 +126,8 @@ func NewChainAnalyzer(
 	}
 
 	idbClient.InitGenesis(genesisTime)
+
+	cli.NetworkConstants = spec.GetNetworkConst(genesisUnix)
 
 	analyzer := &ChainAnalyzer{
 		ctx:              ctx,

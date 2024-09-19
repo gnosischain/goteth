@@ -9,6 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/migalabs/goteth/pkg/db"
 	prom_metrics "github.com/migalabs/goteth/pkg/metrics"
+	"github.com/migalabs/goteth/pkg/spec"
 	"github.com/migalabs/goteth/pkg/utils"
 	"github.com/rs/zerolog"
 	"github.com/sirupsen/logrus"
@@ -34,6 +35,8 @@ type APIClient struct {
 	statesBook *utils.RoutineBook // Book to track what is being downloaded through the CL API: states
 	blocksBook *utils.RoutineBook // Book to track what is being downloaded through the CL API: blocks
 	txBook     *utils.RoutineBook // Book to track what is being downloaded through the EL API: transactions
+
+	NetworkConstants spec.NetworkConst
 }
 
 func NewAPIClient(ctx context.Context, bnEndpoint string, options ...APIClientOption) (*APIClient, error) {

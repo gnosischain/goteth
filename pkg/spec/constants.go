@@ -49,6 +49,43 @@ const (
 	EpochSlots       = 16
 )
 
+type NetworkConst struct {
+	BaseRewardFactor int
+	SlotsPerEpoch    int
+	SlotSeconds      int
+	EpochSlots       int
+}
+
+func GetNetworkConst(genesisTime uint64) NetworkConst {
+
+	switch genesisTime {
+	case MainnetGenesis, HoleskyGenesis:
+		return NetworkConst{
+			BaseRewardFactor: MainnetBaseRewardFactor,
+			SlotsPerEpoch:    MainnetSlotsPerEpoch,
+			SlotSeconds:      MainnetSlotSeconds,
+			EpochSlots:       MainnetEpochSlots,
+		}
+
+	case GnosisGenesis:
+		return NetworkConst{
+			BaseRewardFactor: GnosisBaseRewardFactor,
+			SlotsPerEpoch:    GnosisSlotsPerEpoch,
+			SlotSeconds:      GnosisSlotSeconds,
+			EpochSlots:       GnosisEpochSlots,
+		}
+
+	default:
+		log.Errorf("could not find network. Genesis time: %d", genesisTime)
+		return NetworkConst{
+			BaseRewardFactor: BaseRewardFactor,
+			SlotsPerEpoch:    SlotsPerEpoch,
+			SlotSeconds:      SlotSeconds,
+			EpochSlots:       EpochSlots,
+		}
+	}
+}
+
 /*
 Altair
 */
