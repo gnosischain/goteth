@@ -36,12 +36,12 @@ func (s *APIClient) RequestBeaconState(slot phase0.Slot) (*local_spec.AgnosticSt
 		})
 
 		if newState == nil {
-			return nil, fmt.Errorf("unable to retrieve Beacon State from the beacon node, closing requester routine. nil State")
+			return nil, fmt.Errorf("unable to retrieve beacon state for slot %d from the beacon node, closing requester routine. nil State", slot)
 		}
 
 		if errors.Is(err, context.DeadlineExceeded) {
 			ticker := time.NewTicker(utils.RoutineFlushTimeout)
-			log.Warnf("retrying request: %s", routineKey)
+			log.Warnf("retrying request to retrieve beacon state for slot %d: %s", slot, routineKey)
 			<-ticker.C
 
 		}
@@ -74,9 +74,9 @@ func (s *APIClient) RequestStateRoot(slot phase0.Slot) *phase0.Root {
 	})
 	if err != nil {
 		if response404(err.Error()) {
-			log.Warningf("could not find the state root at %d: %s", slot, err)
+			log.Warningf("could not find the state root at slot %d: %s", slot, err)
 		} else {
-			log.Errorf("error for state root at %d: %s", slot, err)
+			log.Errorf("error for state root at slot %d: %s", slot, err)
 		}
 	} else {
 		return root.Data
@@ -95,7 +95,7 @@ func (s *APIClient) GetFinalizedEndSlotStateRoot() (phase0.Slot, *phase0.Root) {
 	})
 
 	if err != nil {
-		log.Panicf("could not determine the current finalized checkpoint")
+		log.Panicf("could not determine the current finalized checkpoint (head)")
 	}
 
 	finalizedSlot := phase0.Slot(currentFinalized.Data.Finalized.Epoch*local_spec.SlotsPerEpoch - 1)

@@ -27,7 +27,7 @@ func (s *APIClient) RequestBlockRewards(slot phase0.Slot) (spec.BlockRewards, er
 	err = json.Unmarshal(body, &rewards)
 
 	if err != nil {
-		log.Warnf("error parsing block rewards response boyd %s: %s", string(body), err)
+		log.Warnf("error parsing block rewards for slot %d, response response body %s: %s", slot, string(body), err)
 	}
 
 	return rewards, err
