@@ -18,7 +18,7 @@ var (
 
 	deleteProposerDutiesQuery = `
 	DELETE FROM %s
-	WHERE f_proposer_slot/32 = $1;
+	WHERE f_proposer_slot/%v = $1;
 `
 )
 
