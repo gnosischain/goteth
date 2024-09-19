@@ -120,7 +120,7 @@ func NewChainAnalyzer(
 		return &ChainAnalyzer{
 			ctx:    ctx,
 			cancel: cancel,
-		}, errors.Wrap(err, "unable to generate API Client")
+		}, errors.Wrap(err, "unable to generate relays monitorer")
 	}
 
 	idbClient.InitGenesis(genesisTime)

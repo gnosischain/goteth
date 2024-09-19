@@ -18,8 +18,6 @@ github.com/attestantio/go-builder-client v0.5.0 h1:DxYunaN2U7Q8wRf83FzWwanZ2brds
 github.com/attestantio/go-builder-client v0.5.0/go.mod h1:1/ewo8zF6++C6Fldvtq5hjhp9ZAafIK91Vp7XrmUZsE=
 github.com/attestantio/go-eth2-client v0.21.11 h1:0ZYP69O8rJz41055WOf3n1C1NA4jNh2iME/NuTVfgmQ=
 github.com/attestantio/go-eth2-client v0.21.11/go.mod h1:d7ZPNrMX8jLfIgML5u7QZxFo2AukLM+5m08iMaLdqb8=
-github.com/attestantio/go-relay-client v0.2.5 h1:GKcHGETWUowqvL7cE9RM1cz9kXqL56vGoHtqMKpks/Q=
-github.com/attestantio/go-relay-client v0.2.5/go.mod h1:Y6PYgNZkdIfRZLP4eSWJ9PL+Ead3RczexQqhTopKZOE=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
 github.com/bits-and-blooms/bitset v1.14.2 h1:YXVoyPndbdvcEVcseEovVfp0qjJp7S+i5+xgp/Nfbdc=
