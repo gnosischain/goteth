@@ -48,7 +48,7 @@ func (s *APIClient) RequestBeaconBlock(slot phase0.Slot) (*local_spec.AgnosticBl
 
 			if errors.Is(err, context.DeadlineExceeded) {
 				ticker := time.NewTicker(utils.RoutineFlushTimeout)
-				log.Warnf("retrying request: %s", routineKey)
+				log.Warnf("retrying request for beacon block at slot %d: %s", slot, routineKey)
 				<-ticker.C
 			}
 		}
@@ -141,7 +141,7 @@ func (s *APIClient) CreateMissingBlock(slot phase0.Slot) *local_spec.AgnosticBlo
 	})
 	proposerValIdx := phase0.ValidatorIndex(0)
 	if err != nil {
-		log.Errorf("could not request proposer duty: %s", err)
+		log.Errorf("could not request proposer duty for slot %d: %s", slot, err)
 	} else {
 		for _, duty := range duties.Data {
 			if duty.Slot == phase0.Slot(slot) {
