@@ -3,13 +3,13 @@ package clientapi
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"time"
 
 	"github.com/attestantio/go-eth2-client/http"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/migalabs/goteth/pkg/db"
 	prom_metrics "github.com/migalabs/goteth/pkg/metrics"
-	"github.com/migalabs/goteth/pkg/spec"
 	"github.com/migalabs/goteth/pkg/utils"
 	"github.com/rs/zerolog"
 	"github.com/sirupsen/logrus"
@@ -27,26 +27,35 @@ var (
 type APIClientOption func(*APIClient) error
 
 type APIClient struct {
-	ctx     context.Context
-	Api     *http.Service     // Beacon Node
-	ELApi   *ethclient.Client // Execution Node
-	Metrics db.DBMetrics
+	ctx      context.Context
+	Api      *http.Service // Beacon Node
+	Password string
+	ELApi    *ethclient.Client // Execution Node
+	Metrics  db.DBMetrics
 
 	statesBook *utils.RoutineBook // Book to track what is being downloaded through the CL API: states
 	blocksBook *utils.RoutineBook // Book to track what is being downloaded through the CL API: blocks
 	txBook     *utils.RoutineBook // Book to track what is being downloaded through the EL API: transactions
-
-	NetworkConstants spec.NetworkConst
 }
 
 func NewAPIClient(ctx context.Context, bnEndpoint string, options ...APIClientOption) (*APIClient, error) {
 	log.Debugf("generating http client at %s", bnEndpoint)
+
+	parsedURL, err := url.Parse(bnEndpoint)
+	if err != nil {
+		log.Fatal("Failed to parse URL:", err)
+	}
 
 	apiService := &APIClient{
 		ctx:        ctx,
 		statesBook: utils.NewRoutineBook(1, "api-cli-states"),
 		blocksBook: utils.NewRoutineBook(1, "api-cli-blocks"),
 		txBook:     utils.NewRoutineBook(maxParallelConns, "api-cli-tx"),
+	}
+
+	if parsedURL.User != nil {
+		password, _ := parsedURL.User.Password() // xxxxx
+		apiService.Password = password
 	}
 
 	bnCli, err := http.New(
@@ -65,6 +74,8 @@ func NewAPIClient(ctx context.Context, bnEndpoint string, options ...APIClientOp
 	}
 
 	apiService.Api = hc
+
+	// log.Print(apiService.Api.Address())
 
 	for _, o := range options {
 		err := o(apiService)

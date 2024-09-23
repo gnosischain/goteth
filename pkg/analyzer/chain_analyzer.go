@@ -127,8 +127,6 @@ func NewChainAnalyzer(
 
 	idbClient.InitGenesis(genesisTime)
 
-	cli.NetworkConstants = spec.GetNetworkConst(genesisUnix)
-
 	analyzer := &ChainAnalyzer{
 		ctx:              ctx,
 		cancel:           cancel,
