@@ -114,13 +114,15 @@ func NewChainAnalyzer(
 
 	genesisTime := cli.RequestGenesis()
 
+	genesisUnix := uint64(genesisTime.Unix())
+
 	// generate the relays client
-	relayCli, err := relay.InitRelaysMonitorer(pCtx, uint64(genesisTime.Unix()))
+	relayCli, err := relay.InitRelaysMonitorer(pCtx, genesisUnix)
 	if err != nil {
 		return &ChainAnalyzer{
 			ctx:    ctx,
 			cancel: cancel,
-		}, errors.Wrap(err, "unable to generate API Client")
+		}, errors.Wrap(err, "unable to generate relays monitorer")
 	}
 
 	idbClient.InitGenesis(genesisTime)

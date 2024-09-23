@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"github.com/attestantio/go-eth2-client/spec/phase0"
 	"github.com/migalabs/goteth/pkg/spec"
@@ -12,7 +13,7 @@ import (
 
 func (s *APIClient) RequestBlockRewards(slot phase0.Slot) (spec.BlockRewards, error) {
 
-	uri := s.Api.Address() + "/eth/v1/beacon/rewards/blocks/" + fmt.Sprintf("%d", slot)
+	uri := strings.Replace(s.Api.Address(), "xxxxx", s.Password, 1) + "/eth/v1/beacon/rewards/blocks/" + fmt.Sprintf("%d", slot)
 	resp, err := http.Get(uri)
 	if err != nil {
 		log.Fatalln(err)

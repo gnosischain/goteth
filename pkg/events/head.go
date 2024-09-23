@@ -25,6 +25,7 @@ func (e *Events) HandleHeadEvent(event *api.Event) {
 	if event.Data == nil {
 		return
 	}
+
 	data := event.Data.(*api.HeadEvent) // cast to head event
 	headEpoch := phase0.Epoch(data.Slot) / spec.SlotsPerEpoch
 

@@ -3,6 +3,7 @@ package clientapi
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"time"
 
 	"github.com/attestantio/go-eth2-client/http"
@@ -26,10 +27,11 @@ var (
 type APIClientOption func(*APIClient) error
 
 type APIClient struct {
-	ctx     context.Context
-	Api     *http.Service     // Beacon Node
-	ELApi   *ethclient.Client // Execution Node
-	Metrics db.DBMetrics
+	ctx      context.Context
+	Api      *http.Service // Beacon Node
+	Password string
+	ELApi    *ethclient.Client // Execution Node
+	Metrics  db.DBMetrics
 
 	statesBook *utils.RoutineBook // Book to track what is being downloaded through the CL API: states
 	blocksBook *utils.RoutineBook // Book to track what is being downloaded through the CL API: blocks
@@ -39,11 +41,21 @@ type APIClient struct {
 func NewAPIClient(ctx context.Context, bnEndpoint string, options ...APIClientOption) (*APIClient, error) {
 	log.Debugf("generating http client at %s", bnEndpoint)
 
+	parsedURL, err := url.Parse(bnEndpoint)
+	if err != nil {
+		log.Fatal("Failed to parse URL:", err)
+	}
+
 	apiService := &APIClient{
 		ctx:        ctx,
 		statesBook: utils.NewRoutineBook(1, "api-cli-states"),
 		blocksBook: utils.NewRoutineBook(1, "api-cli-blocks"),
 		txBook:     utils.NewRoutineBook(maxParallelConns, "api-cli-tx"),
+	}
+
+	if parsedURL.User != nil {
+		password, _ := parsedURL.User.Password() // xxxxx
+		apiService.Password = password
 	}
 
 	bnCli, err := http.New(
@@ -62,6 +74,8 @@ func NewAPIClient(ctx context.Context, bnEndpoint string, options ...APIClientOp
 	}
 
 	apiService.Api = hc
+
+	// log.Print(apiService.Api.Address())
 
 	for _, o := range options {
 		err := o(apiService)

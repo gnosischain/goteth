@@ -155,5 +155,4 @@ func getNetworkRelays(genesisTime uint64) []string {
 		log.Errorf("could not find network. Genesis time: %d", genesisTime)
 		return []string{}
 	}
-
 }

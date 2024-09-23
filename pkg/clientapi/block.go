@@ -137,7 +137,7 @@ func (s *APIClient) RequestBlockRoot(slot phase0.Slot) phase0.Root {
 func (s *APIClient) CreateMissingBlock(slot phase0.Slot) *local_spec.AgnosticBlock {
 	duties, err := s.Api.ProposerDuties(s.ctx, &api.ProposerDutiesOpts{
 		Indices: []phase0.ValidatorIndex{},
-		Epoch:   phase0.Epoch(slot / 32),
+		Epoch:   phase0.Epoch(slot / phase0.Slot(local_spec.EpochSlots)),
 	})
 	proposerValIdx := phase0.ValidatorIndex(0)
 	if err != nil {
