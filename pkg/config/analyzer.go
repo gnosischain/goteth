@@ -17,6 +17,7 @@ type AnalyzerConfig struct {
 	DbWorkerNum    int         `json:"db-worker-num"`
 	Metrics        string      `json:"metrics"`
 	PrometheusPort int         `json:"prometheus-port"`
+	NewRelicKey    string      `json:"newrelic-key"`
 }
 
 // TODO: read from config-file
@@ -34,6 +35,7 @@ func NewAnalyzerConfig() *AnalyzerConfig {
 		DbWorkerNum:    DefaultDbWorkerNum,
 		Metrics:        DefaultMetrics,
 		PrometheusPort: DefaultPrometheusPort,
+		NewRelicKey:    "",
 	}
 }
 
@@ -83,4 +85,9 @@ func (c *AnalyzerConfig) Apply(ctx *cli.Context) {
 	if ctx.IsSet("prometheus-port") {
 		c.PrometheusPort = ctx.Int("prometheus-port")
 	}
+	// newrelic key
+	if ctx.IsSet("newrelic-key") {
+		c.NewRelicKey = ctx.String("newrelic-key")
+	}
+
 }

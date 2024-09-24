@@ -9,12 +9,12 @@ import (
 	"github.com/migalabs/goteth/pkg/clientapi"
 	"github.com/migalabs/goteth/pkg/config"
 	"github.com/migalabs/goteth/pkg/db"
+	"github.com/migalabs/goteth/pkg/events"
 	prom_metrics "github.com/migalabs/goteth/pkg/metrics"
 	"github.com/migalabs/goteth/pkg/relay"
 	"github.com/migalabs/goteth/pkg/spec"
 	"github.com/migalabs/goteth/pkg/utils"
-
-	"github.com/migalabs/goteth/pkg/events"
+	"github.com/newrelic/go-agent/v3/newrelic"
 	"github.com/pkg/errors"
 )
 
@@ -34,6 +34,8 @@ type ChainAnalyzer struct {
 	relayCli  *relay.RelaysMonitor // client to monitor all relays in list
 	eventsObj events.Events        // object to receive signals from beacon node
 	dbClient  *db.DBService        // client to communicate with clickhouse
+
+	nr *newrelic.Application
 
 	// Control Variables
 	wgMainRoutine *sync.WaitGroup    // wait group for main routine (either historical or head)
@@ -151,6 +153,17 @@ func NewChainAnalyzer(
 	promethMetrics.AddMeticsModule(analyzerMet)
 	promethMetrics.AddMeticsModule(analyzer.processerBook.GetPrometheusMetrics())
 	promethMetrics.AddMeticsModule(idbClient.GetPrometheusMetrics())
+
+	nr, errNr := newrelic.NewApplication(
+		newrelic.ConfigAppName("goteth"),
+		newrelic.ConfigLicense(iConfig.NewRelicKey),
+	)
+
+	if errNr == nil {
+		analyzer.nr = nr
+	} else {
+		log.Printf("could not initialize new relic %s", errNr)
+	}
 
 	return analyzer, nil
 }

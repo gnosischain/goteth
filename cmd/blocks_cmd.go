@@ -85,6 +85,12 @@ var BlocksCommand = &cli.Command{
 			Usage:       "Port on which to expose prometheus metrics",
 			EnvVars:     []string{"ANALYZER_PROMETHEUS_PORT"},
 			DefaultText: "9080",
+		},
+		&cli.IntFlag{
+			Name:        "newrelic-key",
+			Usage:       "Newrelic api key",
+			EnvVars:     []string{"NEWRELIC_KEY"},
+			DefaultText: "",
 		}},
 }
 
