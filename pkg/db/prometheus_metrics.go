@@ -79,6 +79,7 @@ func (r *DBService) initMonitorMetrics() {
 		blobEventsTable,
 		blockRewardsTable,
 		blocksTable,
+		attestationsTable,
 		epochsTable,
 		finalizedTable,
 		genesisTable,

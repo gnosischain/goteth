@@ -20,9 +20,16 @@ func (s *ChainAnalyzer) ProcessBlock(slot phase0.Slot) {
 
 	block := s.downloadCache.BlockHistory.Wait(SlotTo[uint64](slot))
 
-	err := s.dbClient.PersistBlocks([]spec.AgnosticBlock{*block})
+	agnosticBlock := []spec.AgnosticBlock{*block}
+
+	err := s.dbClient.PersistBlocks(agnosticBlock)
 	if err != nil {
 		log.Errorf("error persisting blocks: %s", err.Error())
+	}
+
+	errAtt := s.dbClient.PersistAttestations(agnosticBlock)
+	if errAtt != nil {
+		log.Errorf("error persisting attestations: %s", errAtt.Error())
 	}
 
 	var withdrawals []spec.Withdrawal

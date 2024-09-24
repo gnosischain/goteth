@@ -27,6 +27,20 @@ CREATE TABLE IF NOT EXISTS t_block_metrics(
 	ENGINE = ReplacingMergeTree()
 	ORDER BY (f_slot);
 
+CREATE TABLE IF NOT EXISTS t_attestations(
+	f_timestamp UInt64,
+	f_epoch UInt64,
+	f_slot UInt64,
+	f_attestation_index UInt64,
+	f_attestation_slot UInt64,
+	f_attestation_beacon_block_root TEXT,
+	f_attestation_source_epoch UInt64,
+	f_attestation_source_root TEXT,
+	f_attestation_target_epoch UInt64,
+	f_attestation_target_root TEXT)
+	ENGINE = ReplacingMergeTree()
+	ORDER BY (f_attestation_slot);
+
 CREATE TABLE IF NOT EXISTS t_orphans(
 	f_timestamp UInt64,
 	f_epoch UInt64,

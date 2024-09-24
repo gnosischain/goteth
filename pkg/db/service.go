@@ -141,6 +141,7 @@ type Input[T any] func(t T) proto.Input
 
 type PersistableObject[
 	T spec.AgnosticBlock |
+		spec.Attestation |
 		spec.Epoch |
 		api.FinalizedCheckpointEvent |
 		int64 |

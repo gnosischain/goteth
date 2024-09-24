@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS t_block_metrics;
+DROP TABLE IF EXISTS t_attestations;
 DROP TABLE IF EXISTS t_epoch_metrics_summary;
 DROP TABLE IF EXISTS t_pool_summary;
 DROP TABLE IF EXISTS t_proposer_duties;

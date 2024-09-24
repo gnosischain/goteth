@@ -42,12 +42,13 @@ func (p *DenebMetrics) PreProcessBundle() {
 
 	if !p.baseMetrics.PrevState.EmptyStateRoot() && !p.baseMetrics.CurrentState.EmptyStateRoot() {
 		// block rewards
-		p.ProcessAttestations()
+		// p.ProcessAttestations()
+		// p.ProcessInclusionDelays()
+
 		p.ProcessSlashings()
 		p.ProcessSyncAggregates()
 
 		p.GetMaxFlagIndexDeltas()
-		p.ProcessInclusionDelays()
 		p.GetMaxSyncComReward()
 	}
 }

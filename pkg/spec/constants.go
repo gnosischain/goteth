@@ -89,6 +89,7 @@ const (
 	ReorgModel
 	FinalizedCheckpointModel
 	HeadEventModel
+	AttestationModel
 )
 
 type ValidatorStatus int8

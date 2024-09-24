@@ -53,6 +53,10 @@ func (s *ChainAnalyzer) AdvanceFinalized(newFinalizedSlot phase0.Slot) {
 
 				s.dbClient.DeleteBlockMetrics(phase0.Slot(slot))
 				log.Infof("rewriting metrics for slot %d", slot)
+
+				s.dbClient.DeleteAttestationsMetrics(phase0.Slot(slot))
+				log.Infof("rewriting attestatiins for slot %d", slot)
+
 				// write slot metrics
 				s.ProcessBlock(phase0.Slot(slot))
 			}
@@ -94,6 +98,10 @@ func (s *ChainAnalyzer) HandleReorg(newReorg v1.ChainReorgEvent) {
 			}
 			s.dbClient.DeleteBlockMetrics(i)
 			log.Infof("rewriting metrics for slot %d", i)
+
+			s.dbClient.DeleteAttestationsMetrics(i)
+			log.Infof("rewriting attestatiins for slot %d", i)
+
 			// write slot metrics
 			s.ProcessBlock(i)
 		} else {
