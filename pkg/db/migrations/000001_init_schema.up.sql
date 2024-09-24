@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS t_validator_rewards_summary(
 	f_max_reward UInt64,
 	f_max_att_reward UInt64,
 	f_max_sync_reward UInt64,
-	f_att_slot UInt64,
+	-- f_att_slot UInt64,
 	f_base_reward UInt64,
 	f_in_sync_committee BOOL,
 	f_missing_source BOOL,

@@ -314,14 +314,14 @@ func (p AltairMetrics) GetMaxReward(valIdx phase0.ValidatorIndex) (spec.Validato
 	baseReward := p.GetBaseReward(valIdx, p.baseMetrics.NextState.Validators[valIdx].EffectiveBalance, p.baseMetrics.NextState.TotalActiveBalance)
 
 	result := spec.ValidatorRewards{
-		ValidatorIndex:       valIdx,
-		Epoch:                p.baseMetrics.NextState.Epoch,
-		ValidatorBalance:     p.baseMetrics.NextState.Balances[valIdx],
-		Reward:               p.baseMetrics.EpochReward(valIdx),
-		MaxReward:            maxReward,
-		AttestationReward:    flagIndexMaxReward,
-		SyncCommitteeReward:  syncComMaxReward,
-		AttSlot:              p.baseMetrics.PrevState.EpochStructs.ValidatorAttSlot[valIdx],
+		ValidatorIndex:      valIdx,
+		Epoch:               p.baseMetrics.NextState.Epoch,
+		ValidatorBalance:    p.baseMetrics.NextState.Balances[valIdx],
+		Reward:              p.baseMetrics.EpochReward(valIdx),
+		MaxReward:           maxReward,
+		AttestationReward:   flagIndexMaxReward,
+		SyncCommitteeReward: syncComMaxReward,
+		// AttSlot:              p.baseMetrics.PrevState.EpochStructs.ValidatorAttSlot[valIdx],
 		MissingSource:        flags[spec.AttSourceFlagIndex],
 		MissingTarget:        flags[spec.AttTargetFlagIndex],
 		MissingHead:          flags[spec.AttHeadFlagIndex],

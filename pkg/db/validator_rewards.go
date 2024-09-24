@@ -7,6 +7,7 @@ import (
 	"github.com/migalabs/goteth/pkg/spec"
 )
 
+// f_att_slot,
 var (
 	valRewardsTable             = "t_validator_rewards_summary"
 	insertValidatorRewardsQuery = `
@@ -18,7 +19,6 @@ var (
 		f_max_reward,
 		f_max_att_reward,
 		f_max_sync_reward,
-		f_att_slot,
 		f_base_reward,
 		f_in_sync_committee,
 		f_missing_source,
@@ -43,14 +43,14 @@ var (
 func rewardsInput(vals []spec.ValidatorRewards) proto.Input {
 	// one object per column
 	var (
-		f_val_idx                   proto.ColUInt64
-		f_epoch                     proto.ColUInt64
-		f_balance_eth               proto.ColFloat32
-		f_reward                    proto.ColInt64
-		f_max_reward                proto.ColUInt64
-		f_max_att_reward            proto.ColUInt64
-		f_max_sync_reward           proto.ColUInt64
-		f_att_slot                  proto.ColUInt64
+		f_val_idx         proto.ColUInt64
+		f_epoch           proto.ColUInt64
+		f_balance_eth     proto.ColFloat32
+		f_reward          proto.ColInt64
+		f_max_reward      proto.ColUInt64
+		f_max_att_reward  proto.ColUInt64
+		f_max_sync_reward proto.ColUInt64
+		// f_att_slot                  proto.ColUInt64
 		f_base_reward               proto.ColUInt64
 		f_in_sync_committee         proto.ColBool
 		f_missing_source            proto.ColBool
@@ -70,7 +70,7 @@ func rewardsInput(vals []spec.ValidatorRewards) proto.Input {
 		f_max_reward.Append(uint64(val.MaxReward))
 		f_max_att_reward.Append(uint64(val.AttestationReward))
 		f_max_sync_reward.Append(uint64(val.SyncCommitteeReward))
-		f_att_slot.Append(uint64(val.AttSlot))
+		// f_att_slot.Append(uint64(val.AttSlot))
 		f_base_reward.Append(uint64(val.BaseReward))
 		f_in_sync_committee.Append(val.InSyncCommittee)
 		f_missing_source.Append(val.MissingSource)
@@ -90,7 +90,7 @@ func rewardsInput(vals []spec.ValidatorRewards) proto.Input {
 		{Name: "f_max_reward", Data: f_max_reward},
 		{Name: "f_max_att_reward", Data: f_max_att_reward},
 		{Name: "f_max_sync_reward", Data: f_max_sync_reward},
-		{Name: "f_att_slot", Data: f_att_slot},
+		// {Name: "f_att_slot", Data: f_att_slot},
 		{Name: "f_base_reward", Data: f_base_reward},
 		{Name: "f_in_sync_committee", Data: f_in_sync_committee},
 		{Name: "f_missing_source", Data: f_missing_source},

@@ -159,14 +159,14 @@ func (p Phase0Metrics) GetMaxReward(valIdx phase0.ValidatorIndex) (spec.Validato
 	maxReward += proposerReward
 
 	result := spec.ValidatorRewards{
-		ValidatorIndex:       valIdx,
-		Epoch:                p.baseMetrics.NextState.Epoch,
-		ValidatorBalance:     p.baseMetrics.CurrentState.Balances[valIdx],
-		Reward:               p.baseMetrics.EpochReward(valIdx),
-		MaxReward:            maxReward,
-		AttestationReward:    p.baseMetrics.MaxAttesterRewards[valIdx],
-		SyncCommitteeReward:  0,
-		AttSlot:              p.baseMetrics.PrevState.EpochStructs.ValidatorAttSlot[valIdx],
+		ValidatorIndex:      valIdx,
+		Epoch:               p.baseMetrics.NextState.Epoch,
+		ValidatorBalance:    p.baseMetrics.CurrentState.Balances[valIdx],
+		Reward:              p.baseMetrics.EpochReward(valIdx),
+		MaxReward:           maxReward,
+		AttestationReward:   p.baseMetrics.MaxAttesterRewards[valIdx],
+		SyncCommitteeReward: 0,
+		// AttSlot:              p.baseMetrics.PrevState.EpochStructs.ValidatorAttSlot[valIdx],
 		MissingSource:        !p.baseMetrics.CurrentState.PrevEpochCorrectFlags[spec.AttSourceFlagIndex][valIdx],
 		MissingTarget:        !p.baseMetrics.CurrentState.PrevEpochCorrectFlags[spec.AttTargetFlagIndex][valIdx],
 		MissingHead:          !p.baseMetrics.CurrentState.PrevEpochCorrectFlags[spec.AttHeadFlagIndex][valIdx],

@@ -55,7 +55,10 @@ func (s *APIClient) RequestBeaconState(slot phase0.Slot) (*local_spec.AgnosticSt
 	}
 
 	log.Infof("state at slot %d downloaded in %f seconds", slot, time.Since(startTime).Seconds())
-	resultState, err := local_spec.GetCustomState(*newState.Data, s.NewEpochData(slot))
+
+	epochData := s.NewEpochData(slot)
+
+	resultState, err := local_spec.GetCustomState(*newState.Data, epochData)
 	if err != nil {
 		// close the channel (to tell other routines to stop processing and end)
 		return nil, fmt.Errorf("unable to open beacon state, closing requester routine. %s", err.Error())
