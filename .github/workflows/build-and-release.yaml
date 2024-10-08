@@ -16,11 +16,7 @@ jobs:
     
     # if: github.event.pull_request.merged == true
 
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
       
@@ -54,11 +50,13 @@ jobs:
 
       - name: Push Latest
         run: |
-          docker build . --tag ghcr.io/${{ steps.org_name.outputs.org_name }}/goteth:latest
-          docker push ghcr.io/${{ steps.org_name.outputs.org_name }}/goteth:latest
-
+          docker buildx build --platform linux/amd64,linux/arm64 \
+            --tag ghcr.io/${{ steps.org_name.outputs.org_name }}/goteth:latest \
+            --push .
+  
       - name: Push Versioned
         run: |
-          docker build . --tag ghcr.io/${{ steps.org_name.outputs.org_name }}/goteth:${{ steps.commit.outputs.short }}
-          docker push ghcr.io/${{ steps.org_name.outputs.org_name }}/goteth:${{ steps.commit.outputs.short }}
+          docker buildx build --platform linux/amd64,linux/arm64 \
+            --tag ghcr.io/${{ steps.org_name.outputs.org_name }}/goteth:${{ steps.commit.outputs.short }} \
+            --push .
             
